@@ -7,7 +7,8 @@ LULESH_EXEC_NOOPT = lulesh2.0noopt
 LULESH_EXEC_OPT = lulesh2.0opt
 
 CLANG = clang -emit-llvm -O0 -DUSE_MPI=0
-LLVMOPT = opt -load ../peephole/build/peephole/librmLoadsPass.so -rmLoads 
+LLVMOPT = opt -dce -constprop
+#LLVMOPT = opt -load ../peephole/build/peephole/librmLoadsPass.so -rmLoads 
 #LLVMOPT = opt -dce
 SERCXX = g++ -DUSE_MPI=0
 CXX = $(SERCXX)
