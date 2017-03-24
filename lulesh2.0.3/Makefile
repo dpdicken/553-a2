@@ -1,17 +1,15 @@
-#default build suggestion of MPI + OPENMP with gcc on Livermore machines you might have to change the compiler name
+# Makefile.llvm
+# Will build an executables called lulesh2.0noopt and lulesh2.0opt using llvm's opt program.
 
-SHELL = /bin/sh
-.SUFFIXES: .cc .o
+.SUFFIXES: .cc .s
 
-LULESH_EXEC = lulesh2.0
+LULESH_EXEC_NOOPT = lulesh2.0noopt
+LULESH_EXEC_OPT = lulesh2.0opt
 
-MPI_INC = /opt/local/include/openmpi
-MPI_LIB = /opt/local/lib
-
-#SERCXX = g++ -DUSE_MPI=0
-SERCXX = clang++ -DUSE_MPI=0
-MPICXX = mpig++ -DUSE_MPI=1
-#CXX = $(MPICXX)
+CLANG = clang -emit-llvm -O0 -DUSE_MPI=0
+LLVMOPT = opt -load ../peephole/build/peephole/librmLoadsPass.so -rmLoads 
+#LLVMOPT = opt -dce
+SERCXX = g++ -DUSE_MPI=0
 CXX = $(SERCXX)
 
 SOURCES2.0 = \
@@ -20,46 +18,33 @@ SOURCES2.0 = \
 	lulesh-viz.cc \
 	lulesh-util.cc \
 	lulesh-init.cc
-OBJECTS2.0 = $(SOURCES2.0:.cc=.o)
+ASSEMS2.0 = $(SOURCES2.0:.cc=.s)
+ASSEMSOPT2.0 = $(SOURCES2.0:.cc=.opt.s)
+BITECODE = $(wildcard *.bc)
 
 #Default build suggestions with OpenMP for g++
-#CXXFLAGS = -g -O3 -fopenmp -I. -Wall
-#LDFLAGS = -g -O3 -fopenmp
-CXXFLAGS = -g -O3 -I. -Wall
-LDFLAGS = -g -O3
+CXXFLAGS = -g -O3 -fopenmp -I. -Wall
+LDFLAGS = -g -O3 -fopenmp
 
-#Below are reasonable default flags for a serial build
-#CXXFLAGS = -g -O3 -I. -Wall
-#LDFLAGS = -g -O3 
-
-#common places you might find silo on the Livermore machines.
-#SILO_INCDIR = /opt/local/include
-#SILO_LIBDIR = /opt/local/lib
-#SILO_INCDIR = ./silo/4.9/1.8.10.1/include
-#SILO_LIBDIR = ./silo/4.9/1.8.10.1/lib
-
-#If you do not have silo and visit you can get them at:
-#silo:  https://wci.llnl.gov/codes/silo/downloads.html
-#visit: https://wci.llnl.gov/codes/visit/download.html
-
-#below is and example of how to make with silo, hdf5 to get vizulization by default all this is turned off.  All paths are Livermore specific.
-#CXXFLAGS = -g -DVIZ_MESH -I${SILO_INCDIR} -Wall -Wno-pragmas
-#LDFLAGS = -g -L${SILO_LIBDIR} -Wl,-rpath -Wl,${SILO_LIBDIR} -lsiloh5 -lhdf5
-
-.cc.o: lulesh.h
+#For each source file create unoptimized and optimized llvm bitcode.
+%.s: %.cc lulesh.h
 	@echo "Building $<"
-	$(CXX) -c $(CXXFLAGS) -o $@  $<
+	$(CLANG) -c -o $*.bc $<
+	llc $*.bc
+	$(LLVMOPT) $*.bc -o $*.opt.bc
+	llc $*.opt.bc
 
-all: $(LULESH_EXEC)
+all: $(LULESH_EXEC_NOOPT) $(LULESH_EXEC_OPT)
 
-lulesh2.0: $(OBJECTS2.0)
+$(LULESH_EXEC_NOOPT): $(ASSEMS2.0)
 	@echo "Linking"
-	$(CXX) $(OBJECTS2.0) $(LDFLAGS) -lm -o $@
+	$(CXX) $(ASSEMS2.0) $(LDFLAGS) -lm -o $@
+
+$(LULESH_EXEC_OPT): $(ASSEMSOPT2.0)
+	@echo "Linking"
+	$(CXX) $(ASSEMSOPT2.0) $(LDFLAGS) -lm -o $@
 
 clean:
-	/bin/rm -f *.o *~ $(OBJECTS) $(LULESH_EXEC)
+	/bin/rm -f *.o *~ $(OBJECTS) $(LULESH_EXEC_NOOPT) $(LULESH_EXEC_OPT)
 	/bin/rm -rf *.dSYM
-
-tar: clean
-	cd .. ; tar cvf lulesh-2.0.tar LULESH-2.0 ; mv lulesh-2.0.tar LULESH-2.0
-
+	/bin/rm *.s *.bc lulesh2.0nooptCountLoads lulesh2.0optCountLoads
