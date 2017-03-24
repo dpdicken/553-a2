@@ -236,7 +236,87 @@ make
 
 Here are the results
 
+NOTE: Currently, I cannot get this pass to work with lulesh. The executable runs infinitely for some reason.
+
 <h3> Polly </h3>
+
+Example matrix multiplication input file:
+
+```
+#include <stdio.h>
+ 
+#define N 1536
+float A[N][N];
+float B[N][N];
+float C[N][N];
+ 
+void init_array()
+{
+    int i, j;
+ 
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            A[i][j] = (1+(i*j)%1024)/2.0;
+            B[i][j] = (1+(i*j)%1024)/2.0;
+        }
+    }
+}
+ 
+void print_array()
+{
+    int i, j;
+ 
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            fprintf(stdout, "%lf ", C[i][j]);
+            if (j%80 == 79) fprintf(stdout, "\n");
+        }
+        fprintf(stdout, "\n");
+    }
+}
+ 
+int main()
+{
+    int i, j, k;
+    double t_start, t_end;
+ 
+    init_array();
+ 
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            C[i][j] = 0;
+            for (k = 0; k < N; k++)
+                C[i][j] = C[i][j] + A[i][k] * B[k][j];
+        }
+    }
+ 
+#ifdef TEST
+    print_array();
+#endif
+    return 0;
+}
+```
+
+Output running the provided script which uses polly:
+
+```
+clang -O0 matmul.c
+15.60s
+clang -O3 matmul.c
+6.69s
+clang with basic polly
+clang -O3 -mllvm -polly matmul.c
+2.33s
+polly with openmp
+clang -O3 -mllvm -polly -mllvm -polly-parallel -lgomp matmul.c
+0.48s
+polly with vectorization
+clang -O3 -mllvm -polly -mllvm -polly-vectorizer=stripmine matmul.c
+0.66s
+polly with vectorization and openmp
+clang -O3 -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-parallel -lgomp matmul.c
+0.19s
+```
 
 <h3> LLVM Pass Experimentation </h3>
 
