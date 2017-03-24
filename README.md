@@ -72,6 +72,7 @@ FOM                  =  1124.1501 (z/s)
 ```
 
 <h5> Running Lulsesh with -dce and -constprop optimizations </h5>
+
 ```
 Elapsed time         =      77.45 (s)
 Grind time (us/z/c)  =  3.0778776 (per dom)  ( 3.0778776 overall)
