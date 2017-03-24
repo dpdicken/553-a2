@@ -24,6 +24,8 @@ opt -S -load peephole/build/peephole/librmLoadsPass.so -rmLoads yourcode.ll -o y
 
 yourcode.ll will now contain the code that has been run through the pass.
 
+The source code can be found in peephole/peephole/PA1.cpp
+
 <h5> Implementation and Testing </h5>
 
 This optimization is a function pass, meaning it is run on a per function basis. This is how most global optimizations are implemented in LLVM. 
@@ -80,6 +82,16 @@ Optimizaed llvm IR generated for example.cpp
 
 <h5> Running Lulesh with -rmLoads </h5>
 
+To run lulesh with the rmLoads optimization, do the following
+
+```
+cd lulesh2.0.3
+make
+./lulesh2.0opt
+```
+
+Here are the results
+
 ```
 Elapsed time         =      76.98 (s)
 Grind time (us/z/c)  =  3.0589809 (per dom)  ( 3.0589809 overall)
@@ -102,9 +114,13 @@ To run the pass on your own code, run the following:
 ```
 clang++ -S -emit-llvm yourcode.cpp -o yourcode.ll
 opt -S -load countloads/build/countloads/libCountLoadsPass.so -rmLoads yourcode.ll -o yourcode.ll
+llc -filetype=obj yourcode.ll -o yourcode.o
+clang++ youcode.o countloads/countloads/runtime_defs.o -o yourcode
 ```
 
-yourcode.ll will now contain the code that has been run through the pass.
+yourcode will now be an executable that will run your code and print out the number of loads in it.
+
+The source code can be found in countloads/countloads/CountLoads.cpp
 
 <h5> Implementation and Testing </h5>
 
@@ -112,13 +128,113 @@ This LLVM pass is a Module pass. This means it is run on a per module basis for 
 
 This pass inserts a function call that will call a function which increments a counter after every load instruction. This pass loops through every instruction in each function and simply inserts a call to this function if an instruction is a load. It then calls a function that prints out the count before exiting main.
 
-<h5> Running on example.c (found in /tests) </h5>
+<h5> Running on example2.c (found in /tests) </h5>
 
-TODO
+Normal LLVM IR generated for example2.c
+
+```
+  %retval = alloca i32, align 4
+  %passed = alloca i32, align 4
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %ptr = alloca i32*, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 4, i32* %passed, align 4
+  %0 = load i32, i32* %passed, align 4
+  store i32 %0, i32* %x, align 4
+  %1 = load i32, i32* %passed, align 4
+  %2 = load i32, i32* %x, align 4
+  %mul = mul nsw i32 %2, 3
+  %add = add nsw i32 %1, %mul
+  store i32 %add, i32* %y, align 4
+  store i32* %y, i32** %ptr, align 8
+  %3 = load i32*, i32** %ptr, align 8
+  %4 = load i32, i32* %3, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %if.then, label %if.end
+ 
+if.then:                                          ; preds = %entry
+  %5 = load i32*, i32** %ptr, align 8
+  store i32 0, i32* %5, align 4
+  br label %if.end
+ 
+if.end:                                           ; preds = %if.then, %entry
+  %6 = load i32*, i32** %ptr, align 8
+  %7 = load i32, i32* %6, align 4
+  %add1 = add nsw i32 %7, 4
+  store i32 %add1, i32* %6, align 4
+  %8 = load i32*, i32** %ptr, align 8
+  %9 = load i32, i32* %8, align 4
+  ret i32 %9
+```
+
+LLVM IR with functions calls inserted after loads for example2.c
+
+```
+  %retval = alloca i32, align 4
+  %passed = alloca i32, align 4
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %ptr = alloca i32*, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 4, i32* %passed, align 4
+  call void @increment(i32 0)
+  %0 = load i32, i32* %passed, align 4
+  store i32 %0, i32* %x, align 4
+  call void @increment(i32 0)
+  %1 = load i32, i32* %passed, align 4
+  call void @increment(i32 0)
+  %2 = load i32, i32* %x, align 4
+  %mul = mul nsw i32 %2, 3
+  %add = add nsw i32 %1, %mul
+  store i32 %add, i32* %y, align 4
+  store i32* %y, i32** %ptr, align 8
+  call void @increment(i32 0)
+  %3 = load i32*, i32** %ptr, align 8
+  call void @increment(i32 0)
+  %4 = load i32, i32* %3, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %if.then, label %if.end
+ 
+if.then:                                          ; preds = %entry
+  call void @increment(i32 0)
+  %5 = load i32*, i32** %ptr, align 8
+  store i32 0, i32* %5, align 4
+  br label %if.end
+ 
+if.end:                                           ; preds = %if.then, %entry
+  call void @increment(i32 0)
+  %6 = load i32*, i32** %ptr, align 8
+  call void @increment(i32 0)
+  %7 = load i32, i32* %6, align 4
+  %add1 = add nsw i32 %7, 4
+  store i32 %add1, i32* %6, align 4
+  call void @increment(i32 0)
+  %8 = load i32*, i32** %ptr, align 8
+  call void @increment(i32 0)
+  %9 = load i32, i32* %8, align 4
+  call void @increment(i32 1)
+  ret i32 %9
+```
+
+Running the produced executable gives
+
+```
+10 Loads Instructions
+```
 
 <h5> Running Lulesh with -countLoads </h5>
 
-TODO
+To run lulesh with the countLoads optimization, do the following
+
+```
+cd lulesh2.0.3
+make
+./runCountLoads
+./lulesh2.0optCountLoads
+```
+
+Here are the results
 
 <h3> Polly </h3>
 
