@@ -2910,15 +2910,16 @@ _Z4SQRTd:                               # @_Z4SQRTd
 .Ltmp143:
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movsd	%xmm0, -8(%rbp)
-	sqrtsd	%xmm0, %xmm1
-	ucomisd	%xmm1, %xmm1
+	movapd	%xmm0, %xmm1
+	movsd	%xmm1, -8(%rbp)
+	xorps	%xmm0, %xmm0
+	sqrtsd	%xmm1, %xmm0
+	ucomisd	%xmm0, %xmm0
 	jnp	.LBB33_2
 # BB#1:                                 # %call.sqrt
-	callq	sqrt
-	movapd	%xmm0, %xmm1
-.LBB33_2:                               # %entry.split
 	movapd	%xmm1, %xmm0
+	callq	sqrt
+.LBB33_2:                               # %entry.split
 	addq	$16, %rsp
 	popq	%rbp
 	retq
@@ -3151,29 +3152,29 @@ _ZL16LagrangeElementsR6Domaini:         # @_ZL16LagrangeElementsR6Domaini
 	.cfi_offset %rbx, -32
 .Ltmp170:
 	.cfi_offset %r14, -24
-	movq	%rdi, -40(%rbp)
-	movl	%esi, -20(%rbp)
-	movslq	-20(%rbp), %rdi
+	movq	%rdi, -32(%rbp)
+	movl	%esi, -36(%rbp)
+	movslq	%esi, %rdi
 	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -32(%rbp)
-	movq	-40(%rbp), %rdi
+	movq	%rax, -24(%rbp)
+	movq	-32(%rbp), %rdi
 	movq	%rax, %rsi
 	callq	_ZL20CalcLagrangeElementsR6DomainPd
-	movq	-40(%rbp), %rdi
-	movq	-32(%rbp), %rsi
+	movq	-32(%rbp), %rdi
+	movq	-24(%rbp), %rsi
 	callq	_ZL13CalcQForElemsR6DomainPd
-	movq	-40(%rbp), %rdi
-	movq	-32(%rbp), %rsi
+	movq	-32(%rbp), %rdi
+	movq	-24(%rbp), %rsi
 	callq	_ZL31ApplyMaterialPropertiesForElemsR6DomainPd
-	movq	-40(%rbp), %rbx
-	movq	-32(%rbp), %r14
+	movq	-32(%rbp), %rbx
+	movq	-24(%rbp), %r14
 	movq	%rbx, %rdi
 	callq	_ZNK6Domain5v_cutEv
-	movl	-20(%rbp), %edx
+	movl	-36(%rbp), %edx
 	movq	%rbx, %rdi
 	movq	%r14, %rsi
 	callq	_ZL21UpdateVolumesForElemsR6DomainPddi
-	leaq	-32(%rbp), %rdi
+	leaq	-24(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	addq	$32, %rsp
 	popq	%rbx
@@ -4159,20 +4160,20 @@ _ZL23IntegrateStressForElemsR6DomainPdS1_S1_S1_ii: # @_ZL23IntegrateStressForEle
 	movq	%r8, -200(%rbp)
 	movl	%r9d, -96(%rbp)
 	movl	%eax, -152(%rbp)
-	movl	$1, -88(%rbp)
+	movl	$1, -84(%rbp)
 	movl	-96(%rbp), %eax
 	shll	$3, %eax
-	movl	%eax, -84(%rbp)
-	cmpl	$2, -88(%rbp)
+	movl	%eax, -80(%rbp)
+	cmpl	$2, -84(%rbp)
 	jl	.LBB58_2
 # BB#1:                                 # %if.then
-	movslq	-84(%rbp), %rdi
+	movslq	-80(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -144(%rbp)
-	movslq	-84(%rbp), %rdi
+	movslq	-80(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -136(%rbp)
-	movslq	-84(%rbp), %rdi
+	movslq	-80(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -128(%rbp)
 .LBB58_2:                               # %if.end
@@ -4220,7 +4221,7 @@ _ZL23IntegrateStressForElemsR6DomainPdS1_S1_S1_ii: # @_ZL23IntegrateStressForEle
 	movq	%r15, %r8
 	movq	%r12, %r9
 	callq	_ZL19CalcElemNodeNormalsPdS_S_PKdS1_S1_
-	cmpl	$2, -88(%rbp)
+	cmpl	$2, -84(%rbp)
 	jl	.LBB58_7
 # BB#5:                                 # %if.then23
                                         #   in Loop: Header=BB58_3 Depth=1
@@ -4301,7 +4302,7 @@ _ZL23IntegrateStressForElemsR6DomainPdS1_S1_S1_ii: # @_ZL23IntegrateStressForEle
 	jle	.LBB58_9
 	jmp	.LBB58_6
 .LBB58_10:                              # %for.end69
-	cmpl	$2, -88(%rbp)
+	cmpl	$2, -84(%rbp)
 	jl	.LBB58_18
 # BB#11:                                # %if.then71
 	movl	$0, -44(%rbp)
@@ -4353,35 +4354,34 @@ _ZL23IntegrateStressForElemsR6DomainPdS1_S1_S1_ii: # @_ZL23IntegrateStressForEle
 	movq	$0, -120(%rbp)
 	movq	$0, -112(%rbp)
 	movq	$0, -104(%rbp)
-	movl	$0, -80(%rbp)
+	movl	$0, -76(%rbp)
 	jmp	.LBB58_14
 	.p2align	4, 0x90
 .LBB58_15:                              # %for.inc92
                                         #   in Loop: Header=BB58_14 Depth=2
-	movslq	-80(%rbp), %rax
-	movq	-184(%rbp), %rcx
-	movl	(%rcx,%rax,4), %eax
-	movl	%eax, -76(%rbp)
 	movslq	-76(%rbp), %rax
+	movq	-184(%rbp), %rcx
+	movslq	(%rcx,%rax,4), %rax
+	movl	%eax, -88(%rbp)
 	movq	-144(%rbp), %rcx
 	movsd	-120(%rbp), %xmm0       # xmm0 = mem[0],zero
 	addsd	(%rcx,%rax,8), %xmm0
 	movsd	%xmm0, -120(%rbp)
-	movslq	-76(%rbp), %rax
+	movslq	-88(%rbp), %rax
 	movq	-136(%rbp), %rcx
 	movsd	-112(%rbp), %xmm0       # xmm0 = mem[0],zero
 	addsd	(%rcx,%rax,8), %xmm0
 	movsd	%xmm0, -112(%rbp)
-	movslq	-76(%rbp), %rax
+	movslq	-88(%rbp), %rax
 	movq	-128(%rbp), %rcx
 	movsd	-104(%rbp), %xmm0       # xmm0 = mem[0],zero
 	addsd	(%rcx,%rax,8), %xmm0
 	movsd	%xmm0, -104(%rbp)
-	incl	-80(%rbp)
+	incl	-76(%rbp)
 .LBB58_14:                              # %for.cond78
                                         #   Parent Loop BB58_12 Depth=1
                                         # =>  This Inner Loop Header: Depth=2
-	movl	-80(%rbp), %eax
+	movl	-76(%rbp), %eax
 	cmpl	-148(%rbp), %eax
 	jl	.LBB58_15
 	jmp	.LBB58_16
@@ -4444,11 +4444,10 @@ _ZL28CalcHourglassControlForElemsR6DomainPdd: # @_ZL28CalcHourglassControlForEle
 	movsd	%xmm0, -136(%rbp)
 	movq	-64(%rbp), %rdi
 	callq	_ZN6Domain7numElemEv
-	movl	(%rax), %eax
-	movl	%eax, -68(%rbp)
-	shll	$3, %eax
-	movl	%eax, -56(%rbp)
-	movslq	-56(%rbp), %rdi
+	movslq	(%rax), %rdi
+	movl	%edi, -68(%rbp)
+	shlq	$3, %rdi
+	movl	%edi, -56(%rbp)
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -128(%rbp)
 	movslq	-56(%rbp), %rdi
@@ -5757,20 +5756,20 @@ _ZL28CalcFBHourglassForceForElemsR6DomainPdS1_S1_S1_S1_S1_S1_dii: # @_ZL28CalcFB
 	movsd	%xmm0, -776(%rbp)
 	movl	%r11d, -212(%rbp)
 	movl	%r10d, -272(%rbp)
-	movl	$1, -208(%rbp)
+	movl	$1, -204(%rbp)
 	movl	-212(%rbp), %eax
 	shll	$3, %eax
-	movl	%eax, -204(%rbp)
-	cmpl	$2, -208(%rbp)
+	movl	%eax, -200(%rbp)
+	cmpl	$2, -204(%rbp)
 	jl	.LBB69_2
 # BB#1:                                 # %if.then
-	movslq	-204(%rbp), %rdi
+	movslq	-200(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -264(%rbp)
-	movslq	-204(%rbp), %rdi
+	movslq	-200(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -256(%rbp)
-	movslq	-204(%rbp), %rdi
+	movslq	-200(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -248(%rbp)
 .LBB69_2:                               # %if.end
@@ -6342,7 +6341,7 @@ _ZL28CalcFBHourglassForceForElemsR6DomainPdS1_S1_S1_S1_S1_S1_dii: # @_ZL28CalcFB
 	movq	%rbx, %r8
 	movq	%r14, %r9
 	callq	_ZL24CalcElemFBHourglassForcePdS_S_PA4_ddS_S_S_
-	cmpl	$2, -208(%rbp)
+	cmpl	$2, -204(%rbp)
 	jge	.LBB69_8
 # BB#9:                                 # %if.else
                                         #   in Loop: Header=BB69_3 Depth=1
@@ -6565,7 +6564,7 @@ _ZL28CalcFBHourglassForceForElemsR6DomainPdS1_S1_S1_S1_S1_S1_dii: # @_ZL28CalcFB
 	incl	-68(%rbp)
 	jmp	.LBB69_3
 .LBB69_10:                              # %for.end635
-	cmpl	$2, -208(%rbp)
+	cmpl	$2, -204(%rbp)
 	jl	.LBB69_18
 # BB#11:                                # %if.then637
 	movl	$0, -72(%rbp)
@@ -6620,35 +6619,34 @@ _ZL28CalcFBHourglassForceForElemsR6DomainPdS1_S1_S1_S1_S1_S1_dii: # @_ZL28CalcFB
 	movq	$0, -240(%rbp)
 	movq	$0, -232(%rbp)
 	movq	$0, -224(%rbp)
-	movl	$0, -200(%rbp)
+	movl	$0, -196(%rbp)
 	jmp	.LBB69_14
 	.p2align	4, 0x90
 .LBB69_15:                              # %for.inc657
                                         #   in Loop: Header=BB69_14 Depth=2
-	movslq	-200(%rbp), %rax
-	movq	-744(%rbp), %rcx
-	movl	(%rcx,%rax,4), %eax
-	movl	%eax, -196(%rbp)
 	movslq	-196(%rbp), %rax
+	movq	-744(%rbp), %rcx
+	movslq	(%rcx,%rax,4), %rax
+	movl	%eax, -208(%rbp)
 	movq	-264(%rbp), %rcx
 	movsd	-240(%rbp), %xmm0       # xmm0 = mem[0],zero
 	addsd	(%rcx,%rax,8), %xmm0
 	movsd	%xmm0, -240(%rbp)
-	movslq	-196(%rbp), %rax
+	movslq	-208(%rbp), %rax
 	movq	-256(%rbp), %rcx
 	movsd	-232(%rbp), %xmm0       # xmm0 = mem[0],zero
 	addsd	(%rcx,%rax,8), %xmm0
 	movsd	%xmm0, -232(%rbp)
-	movslq	-196(%rbp), %rax
+	movslq	-208(%rbp), %rax
 	movq	-248(%rbp), %rcx
 	movsd	-224(%rbp), %xmm0       # xmm0 = mem[0],zero
 	addsd	(%rcx,%rax,8), %xmm0
 	movsd	%xmm0, -224(%rbp)
-	incl	-200(%rbp)
+	incl	-196(%rbp)
 .LBB69_14:                              # %for.cond643
                                         #   Parent Loop BB69_12 Depth=1
                                         # =>  This Inner Loop Header: Depth=2
-	movl	-200(%rbp), %eax
+	movl	-196(%rbp), %eax
 	cmpl	-268(%rbp), %eax
 	jl	.LBB69_15
 	jmp	.LBB69_16
@@ -12828,51 +12826,51 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	movq	%rsp, %rbp
 .Ltmp704:
 	.cfi_def_cfa_register %rbp
-	subq	$304, %rsp              # imm = 0x130
+	subq	$288, %rsp              # imm = 0x120
 	movq	%rdi, -16(%rbp)
 	movq	%rsi, -64(%rbp)
 	movl	%edx, -4(%rbp)
 	movq	%rcx, -48(%rbp)
-	movl	%r8d, -220(%rbp)
+	movl	%r8d, -208(%rbp)
 	movq	-16(%rbp), %rdi
 	callq	_ZNK6Domain5e_cutEv
-	movsd	%xmm0, -288(%rbp)
-	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain5p_cutEv
-	movsd	%xmm0, -280(%rbp)
-	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain5ss4o3Ev
 	movsd	%xmm0, -272(%rbp)
 	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain5q_cutEv
+	callq	_ZNK6Domain5p_cutEv
 	movsd	%xmm0, -264(%rbp)
 	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain7eosvmaxEv
-	movsd	%xmm0, -208(%rbp)
-	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain7eosvminEv
-	movsd	%xmm0, -240(%rbp)
-	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain4pminEv
+	callq	_ZNK6Domain5ss4o3Ev
 	movsd	%xmm0, -256(%rbp)
 	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain4eminEv
+	callq	_ZNK6Domain5q_cutEv
 	movsd	%xmm0, -248(%rbp)
 	movq	-16(%rbp), %rdi
-	callq	_ZNK6Domain7refdensEv
+	callq	_ZNK6Domain7eosvmaxEv
+	movsd	%xmm0, -200(%rbp)
+	movq	-16(%rbp), %rdi
+	callq	_ZNK6Domain7eosvminEv
+	movsd	%xmm0, -224(%rbp)
+	movq	-16(%rbp), %rdi
+	callq	_ZNK6Domain4pminEv
+	movsd	%xmm0, -240(%rbp)
+	movq	-16(%rbp), %rdi
+	callq	_ZNK6Domain4eminEv
 	movsd	%xmm0, -232(%rbp)
+	movq	-16(%rbp), %rdi
+	callq	_ZNK6Domain7refdensEv
+	movsd	%xmm0, -216(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -200(%rbp)
-	movslq	-4(%rbp), %rdi
-	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -136(%rbp)
+	movq	%rax, -192(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -128(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -192(%rbp)
+	movq	%rax, -120(%rbp)
+	movslq	-4(%rbp), %rdi
+	callq	_Z8AllocateIdEPT_m
+	movq	%rax, -184(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -88(%rbp)
@@ -12881,62 +12879,62 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	movq	%rax, -80(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -184(%rbp)
-	movslq	-4(%rbp), %rdi
-	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -176(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -168(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -120(%rbp)
+	movq	%rax, -160(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -112(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
-	movq	%rax, -160(%rbp)
+	movq	%rax, -104(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -152(%rbp)
 	movslq	-4(%rbp), %rdi
 	callq	_Z8AllocateIdEPT_m
 	movq	%rax, -144(%rbp)
-	movl	$0, -100(%rbp)
+	movslq	-4(%rbp), %rdi
+	callq	_Z8AllocateIdEPT_m
+	movq	%rax, -136(%rbp)
+	movl	$0, -96(%rbp)
 	jmp	.LBB186_1
 	.p2align	4, 0x90
 .LBB186_23:                             # %for.inc133
                                         #   in Loop: Header=BB186_1 Depth=1
-	movq	-120(%rbp), %rdi
-	movq	-112(%rbp), %rsi
-	movq	-160(%rbp), %rdx
-	movq	-152(%rbp), %rcx
-	movq	-144(%rbp), %r8
-	movq	-128(%rbp), %r9
-	movsd	-256(%rbp), %xmm0       # xmm0 = mem[0],zero
-	movsd	-280(%rbp), %xmm1       # xmm1 = mem[0],zero
-	movsd	-288(%rbp), %xmm2       # xmm2 = mem[0],zero
-	movsd	-264(%rbp), %xmm3       # xmm3 = mem[0],zero
-	movsd	-248(%rbp), %xmm4       # xmm4 = mem[0],zero
-	movsd	-232(%rbp), %xmm5       # xmm5 = mem[0],zero
-	movsd	-208(%rbp), %xmm6       # xmm6 = mem[0],zero
+	movq	-112(%rbp), %rdi
+	movq	-104(%rbp), %rsi
+	movq	-152(%rbp), %rdx
+	movq	-144(%rbp), %rcx
+	movq	-136(%rbp), %r8
+	movq	-120(%rbp), %r9
+	movsd	-240(%rbp), %xmm0       # xmm0 = mem[0],zero
+	movsd	-264(%rbp), %xmm1       # xmm1 = mem[0],zero
+	movsd	-272(%rbp), %xmm2       # xmm2 = mem[0],zero
+	movsd	-248(%rbp), %xmm3       # xmm3 = mem[0],zero
+	movsd	-232(%rbp), %xmm4       # xmm4 = mem[0],zero
+	movsd	-216(%rbp), %xmm5       # xmm5 = mem[0],zero
+	movsd	-200(%rbp), %xmm6       # xmm6 = mem[0],zero
 	movl	-4(%rbp), %eax
 	subq	$8, %rsp
 	pushq	-48(%rbp)
 	pushq	%rax
-	pushq	-176(%rbp)
-	pushq	-184(%rbp)
-	pushq	-136(%rbp)
 	pushq	-168(%rbp)
+	pushq	-176(%rbp)
+	pushq	-128(%rbp)
+	pushq	-160(%rbp)
 	pushq	-64(%rbp)
 	pushq	-80(%rbp)
 	pushq	-88(%rbp)
+	pushq	-184(%rbp)
 	pushq	-192(%rbp)
-	pushq	-200(%rbp)
 	callq	_ZL18CalcEnergyForElemsPdS_S_S_S_S_S_S_S_S_S_S_S_dddddS_S_ddiPi
 	addq	$96, %rsp
-	incl	-100(%rbp)
+	incl	-96(%rbp)
 .LBB186_1:                              # %for.cond
                                         # =>This Loop Header: Depth=1
                                         #     Child Loop BB186_3 Depth 2
@@ -12944,8 +12942,8 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
                                         #     Child Loop BB186_10 Depth 2
                                         #     Child Loop BB186_16 Depth 2
                                         #     Child Loop BB186_21 Depth 2
-	movl	-100(%rbp), %eax
-	cmpl	-220(%rbp), %eax
+	movl	-96(%rbp), %eax
+	cmpl	-208(%rbp), %eax
 	jge	.LBB186_24
 # BB#2:                                 # %for.body
                                         #   in Loop: Header=BB186_1 Depth=1
@@ -12962,42 +12960,42 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	callq	_ZN6Domain1eEi
 	movsd	(%rax), %xmm0           # xmm0 = mem[0],zero
 	movslq	-20(%rbp), %rax
-	movq	-200(%rbp), %rcx
+	movq	-192(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
 	movq	-16(%rbp), %rdi
 	movl	-36(%rbp), %esi
 	callq	_ZN6Domain4delvEi
 	movsd	(%rax), %xmm0           # xmm0 = mem[0],zero
 	movslq	-20(%rbp), %rax
-	movq	-136(%rbp), %rcx
+	movq	-128(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
 	movq	-16(%rbp), %rdi
 	movl	-36(%rbp), %esi
 	callq	_ZN6Domain1pEi
 	movsd	(%rax), %xmm0           # xmm0 = mem[0],zero
 	movslq	-20(%rbp), %rax
-	movq	-128(%rbp), %rcx
+	movq	-120(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
 	movq	-16(%rbp), %rdi
 	movl	-36(%rbp), %esi
 	callq	_ZN6Domain1qEi
 	movsd	(%rax), %xmm0           # xmm0 = mem[0],zero
 	movslq	-20(%rbp), %rax
-	movq	-192(%rbp), %rcx
+	movq	-184(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
 	movq	-16(%rbp), %rdi
 	movl	-36(%rbp), %esi
 	callq	_ZN6Domain2qqEi
 	movsd	(%rax), %xmm0           # xmm0 = mem[0],zero
 	movslq	-20(%rbp), %rax
-	movq	-184(%rbp), %rcx
+	movq	-176(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
 	movq	-16(%rbp), %rdi
 	movl	-36(%rbp), %esi
 	callq	_ZN6Domain2qlEi
 	movsd	(%rax), %xmm0           # xmm0 = mem[0],zero
 	movslq	-20(%rbp), %rax
-	movq	-176(%rbp), %rcx
+	movq	-168(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
 	incl	-20(%rbp)
 .LBB186_3:                              # %for.cond36
@@ -13015,9 +13013,8 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
                                         #   in Loop: Header=BB186_6 Depth=2
 	movslq	-32(%rbp), %rax
 	movq	-48(%rbp), %rcx
-	movl	(%rcx,%rax,4), %eax
-	movl	%eax, -96(%rbp)
-	movslq	-96(%rbp), %rax
+	movslq	(%rcx,%rax,4), %rax
+	movl	%eax, -204(%rbp)
 	movq	-64(%rbp), %rcx
 	movsd	.LCPI186_0(%rip), %xmm0 # xmm0 = mem[0],zero
 	movapd	%xmm0, %xmm2
@@ -13026,14 +13023,14 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	movslq	-32(%rbp), %rax
 	movq	-88(%rbp), %rcx
 	movsd	%xmm0, (%rcx,%rax,8)
-	movslq	-96(%rbp), %rax
+	movslq	-204(%rbp), %rax
 	movq	-64(%rbp), %rcx
 	movslq	-32(%rbp), %rdx
-	movq	-136(%rbp), %rsi
+	movq	-128(%rbp), %rsi
 	movsd	(%rsi,%rdx,8), %xmm0    # xmm0 = mem[0],zero
 	mulsd	.LCPI186_1(%rip), %xmm0
 	addsd	(%rcx,%rax,8), %xmm0
-	movsd	%xmm0, -296(%rbp)
+	movsd	%xmm0, -288(%rbp)
 	movapd	%xmm2, %xmm1
 	divsd	%xmm0, %xmm1
 	subsd	%xmm2, %xmm1
@@ -13049,7 +13046,7 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	jl	.LBB186_7
 # BB#8:                                 # %for.end79
                                         #   in Loop: Header=BB186_1 Depth=1
-	movsd	-240(%rbp), %xmm0       # xmm0 = mem[0],zero
+	movsd	-224(%rbp), %xmm0       # xmm0 = mem[0],zero
 	ucomisd	.LCPI186_2, %xmm0
 	jne	.LBB186_9
 	jnp	.LBB186_14
@@ -13071,11 +13068,10 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
                                         #   in Loop: Header=BB186_10 Depth=2
 	movslq	-40(%rbp), %rax
 	movq	-48(%rbp), %rcx
-	movl	(%rcx,%rax,4), %eax
-	movl	%eax, -216(%rbp)
-	movslq	-216(%rbp), %rax
+	movslq	(%rcx,%rax,4), %rax
+	movl	%eax, -280(%rbp)
 	movq	-64(%rbp), %rcx
-	movsd	-240(%rbp), %xmm0       # xmm0 = mem[0],zero
+	movsd	-224(%rbp), %xmm0       # xmm0 = mem[0],zero
 	ucomisd	(%rcx,%rax,8), %xmm0
 	jb	.LBB186_13
 # BB#12:                                # %if.then91
@@ -13089,7 +13085,7 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	.p2align	4, 0x90
 .LBB186_14:                             # %if.end99
                                         #   in Loop: Header=BB186_1 Depth=1
-	movsd	-208(%rbp), %xmm0       # xmm0 = mem[0],zero
+	movsd	-200(%rbp), %xmm0       # xmm0 = mem[0],zero
 	ucomisd	.LCPI186_2, %xmm0
 	jne	.LBB186_15
 	jnp	.LBB186_20
@@ -13111,17 +13107,16 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
                                         #   in Loop: Header=BB186_16 Depth=2
 	movslq	-28(%rbp), %rax
 	movq	-48(%rbp), %rcx
-	movl	(%rcx,%rax,4), %eax
-	movl	%eax, -212(%rbp)
-	movslq	-212(%rbp), %rax
+	movslq	(%rcx,%rax,4), %rax
+	movl	%eax, -276(%rbp)
 	movq	-64(%rbp), %rcx
 	movsd	(%rcx,%rax,8), %xmm0    # xmm0 = mem[0],zero
-	ucomisd	-208(%rbp), %xmm0
+	ucomisd	-200(%rbp), %xmm0
 	jb	.LBB186_19
 # BB#18:                                # %if.then112
                                         #   in Loop: Header=BB186_16 Depth=2
 	movslq	-28(%rbp), %rax
-	movq	-128(%rbp), %rcx
+	movq	-120(%rbp), %rcx
 	movq	$0, (%rcx,%rax,8)
 	movslq	-28(%rbp), %rax
 	movq	-88(%rbp), %rcx
@@ -13139,7 +13134,7 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 .LBB186_22:                             # %for.inc130
                                         #   in Loop: Header=BB186_21 Depth=2
 	movslq	-52(%rbp), %rax
-	movq	-168(%rbp), %rcx
+	movq	-160(%rbp), %rcx
 	movq	$0, (%rcx,%rax,8)
 	incl	-52(%rbp)
 .LBB186_21:                             # %for.cond125
@@ -13160,7 +13155,7 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 	movl	(%rcx,%rax,4), %esi
 	movl	%esi, -92(%rbp)
 	movslq	-24(%rbp), %rax
-	movq	-120(%rbp), %rcx
+	movq	-112(%rbp), %rcx
 	movsd	(%rcx,%rax,8), %xmm0    # xmm0 = mem[0],zero
 	movsd	%xmm0, -72(%rbp)        # 8-byte Spill
 	movq	-16(%rbp), %rdi
@@ -13169,7 +13164,7 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
                                         # xmm0 = mem[0],zero
 	movsd	%xmm0, (%rax)
 	movslq	-24(%rbp), %rax
-	movq	-112(%rbp), %rcx
+	movq	-104(%rbp), %rcx
 	movsd	(%rcx,%rax,8), %xmm0    # xmm0 = mem[0],zero
 	movsd	%xmm0, -72(%rbp)        # 8-byte Spill
 	movq	-16(%rbp), %rdi
@@ -13179,7 +13174,7 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
                                         # xmm0 = mem[0],zero
 	movsd	%xmm0, (%rax)
 	movslq	-24(%rbp), %rax
-	movq	-160(%rbp), %rcx
+	movq	-152(%rbp), %rcx
 	movsd	(%rcx,%rax,8), %xmm0    # xmm0 = mem[0],zero
 	movsd	%xmm0, -72(%rbp)        # 8-byte Spill
 	movq	-16(%rbp), %rdi
@@ -13197,46 +13192,46 @@ _ZL15EvalEOSForElemsR6DomainPdiPii:     # @_ZL15EvalEOSForElemsR6DomainPdiPii
 # BB#27:                                # %for.end154
 	movq	-16(%rbp), %rdi
 	movq	-64(%rbp), %rsi
-	movsd	-232(%rbp), %xmm0       # xmm0 = mem[0],zero
-	movq	-112(%rbp), %rdx
-	movq	-120(%rbp), %rcx
-	movq	-144(%rbp), %r8
-	movq	-152(%rbp), %r9
-	movsd	-272(%rbp), %xmm1       # xmm1 = mem[0],zero
+	movsd	-216(%rbp), %xmm0       # xmm0 = mem[0],zero
+	movq	-104(%rbp), %rdx
+	movq	-112(%rbp), %rcx
+	movq	-136(%rbp), %r8
+	movq	-144(%rbp), %r9
+	movsd	-256(%rbp), %xmm1       # xmm1 = mem[0],zero
 	movl	-4(%rbp), %eax
 	pushq	-48(%rbp)
 	pushq	%rax
 	callq	_ZL22CalcSoundSpeedForElemsR6DomainPddS1_S1_S1_S1_diPi
 	addq	$16, %rsp
+	leaq	-136(%rbp), %rdi
+	callq	_Z7ReleaseIdEvPPT_
 	leaq	-144(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	leaq	-152(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
-	leaq	-160(%rbp), %rdi
+	leaq	-104(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	leaq	-112(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
-	leaq	-120(%rbp), %rdi
+	leaq	-160(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	leaq	-168(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	leaq	-176(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
-	leaq	-184(%rbp), %rdi
-	callq	_Z7ReleaseIdEvPPT_
 	leaq	-80(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	leaq	-88(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
-	leaq	-192(%rbp), %rdi
+	leaq	-184(%rbp), %rdi
+	callq	_Z7ReleaseIdEvPPT_
+	leaq	-120(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
 	leaq	-128(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
-	leaq	-136(%rbp), %rdi
+	leaq	-192(%rbp), %rdi
 	callq	_Z7ReleaseIdEvPPT_
-	leaq	-200(%rbp), %rdi
-	callq	_Z7ReleaseIdEvPPT_
-	addq	$304, %rsp              # imm = 0x130
+	addq	$288, %rsp              # imm = 0x120
 	popq	%rbp
 	retq
 .Lfunc_end186:
