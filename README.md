@@ -240,7 +240,27 @@ make
 
 Here are the results
 
-NOTE: Currently, I cannot get this pass to work with lulesh. The executable runs infinitely for some reason.
+<h5> countLoads without rmLoads </h5>
+
+```
+Elapsed time         =     667.76 (s) 
+Grind time (us/z/c)  =  26.536301 (per dom)  ( 26.536301 overall)
+FOM                  =  37.684227 (z/s)
+ 
+310557530430 Loads Instructions
+```
+
+<h5> countLoads with rmLoads </h5>
+
+```
+Elapsed time         =     615.38 (s) 
+Grind time (us/z/c)  =  24.454584 (per dom)  ( 24.454584 overall)
+FOM                  =  40.892129 (z/s)
+ 
+306829443189 Loads Instructions
+```
+
+
 
 <h3> Polly </h3>
 
@@ -358,3 +378,7 @@ FOM                  =  324.89921 (z/s)
 
 Using LLVM's opt utility, you are able to generate visual representations of your program during the compilation process. You are able to visualize aspects of the compilation process such as the control flow graph of a function or the callgraph of a program. Below is an example of a CFG generated from running opt on the lulesh program.
 ![](images/cfg.png?raw=true)
+
+<h3> Connections </h3>
+
+
