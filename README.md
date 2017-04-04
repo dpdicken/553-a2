@@ -357,4 +357,4 @@ FOM                  =  324.89921 (z/s)
 <h5> Visualizing with opt </h5>
 
 Using LLVM's opt utility, you are able to generate visual representations of your program during the compilation process. You are able to visualize aspects of the compilation process such as the control flow graph of a function or the callgraph of a program. Below is an example of a CFG generated from running opt on the lulesh program.
-![](./images/cfg.png?raw=true)
+![](images/cfg.png?raw=true)
