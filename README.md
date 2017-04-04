@@ -381,4 +381,23 @@ Using LLVM's opt utility, you are able to generate visual representations of you
 
 <h3> Connections </h3>
 
+<h5> Reducing Code Size </h5>
+In this assignment, we implemented a pass that removes code. This got me thinking, what if someone needed their program to be small, but efficieny isnt necessarily an issue, are there passes that cater to this? This issue might come up in embedded systems. I found some llvm passes that help accomplish this. One of them is "-strip".  According to the llvm documentation, this pass 
 
+```
+Performs code stripping. This transformation can delete:
+
+- names for virtual registers
+- symbols for internal globals and functions
+- debug information
+```
+
+Essentially, it removes things that arent critical to the function of the code, which helps reduce code size.
+
+<h5> Obfuscation via LLVM </h5>
+
+Another thought I had while working on these passes was using LLVM to obfuscate code. Because there are compilers for many common languages that compile into LLVM IR, you could generalize code obfuscation to many languages through using LLVM. I began to think about how one might write a pass that obfuscates the IR. You could write a simple obfuscation pass that functions similarily to rmLoads. Everytime you detect a 0 in the IR, you could generate and evaluate a non-trivial boolean expression that evaluates to false, and then replace that 0 with the resulting value. There are many other ways you could add more obfuscation into the pass.
+
+<h5> Hand Made Optimizations </h5>
+
+When I write code, I always like to write "optimized code."  Whenever I see a statement that could hoisted out of a loop, I move it. When I see dead code that will never be reached, I remove it. I do many simple optimizations that don't seem to effect the code that much. It is interesting to me that a lot of optimizations are automated versions of these optimizations that I try to by hand. Its nice to know I can always compile my code with -O3 to catch things I might miss!
