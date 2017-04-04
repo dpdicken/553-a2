@@ -1,18 +1,19 @@
-# assignment-2-llvm-passes-dpdicken
-assignment-2-llvm-passes-dpdicken created by GitHub Classroom
 
 <h1> Assignment 2: LLVM Passes </h2>
 
 <h3> Intro </h3>
-This project contains two passes written to be used by LLVM. This accompanying README also contains information on how to run these passes, how they were created, how they effect performance of the lulesh application, as well as a discussion of other passes built in to LLVM.
+This project contains two passes written in LLVM using it's API's to be used by LLVM to optimize passed in IR. This accompanying README also contains information on how to run these passes, how they were created, how they effect performance of the lulesh application, as well as a discussion of other passes built-in to LLVM.
 
 <h3> Peephole Optimzation Pass </h3>
 
 <h5> Building and Running </h5>
 
-To compile the peephole optimization code run the following:
+To compile the peephole optimization code run the following from the base directory:
 ```
-cd peephole/build
+cd peephole
+mkdir build
+cd build
+cmake ..
 make
 ```
 
@@ -28,7 +29,7 @@ The source code can be found in peephole/peephole/PA1.cpp
 
 <h5> Implementation and Testing </h5>
 
-This optimization is a function pass, meaning it is run on a per function basis. This is how most global optimizations are implemented in LLVM. 
+This optimization is a function pass, meaning it is run on a per function basis. Most optimizations work on a per function basis. There are multiple ways to optimize per function. You could write a function pass, which is run on each function, or a module pass, and loop over each function in the module. Each way is valid. 
 This pass starts off by assinging a unique id that starts with 1 to each instruction in the function. Every instruction in the passed in file is assigned a unique id. Once every instruction is labeled, we loop through each basic block and examine the instructions within. Once a store immediately followed by a load is detected, we determine if we are storing and loading the same value. If we are, we remove the load instruction and change all uses of that loaded value to the one we were storing. 
 
 <h5> Running on example.cpp (found in /tests) </h5>
@@ -98,29 +99,32 @@ Grind time (us/z/c)  =  3.0589809 (per dom)  ( 3.0589809 overall)
 FOM                  =  326.90626 (z/s)
 ``` 
 
-It seems that this optimization does not actually do much to speed the lulesh application up.
+It seems that this optimization does not actually do much to speed the lulesh application up. This is likely due to the fact the lulesh application contains lots of loops. Although we may be removing unnecessary loads, the amount of load instructions run is still very high due to the loops.
 
 <h3> Dynamic Load Count Instrumentation Pass </h3>
 
 <h5> Building and Running </h5>
 
-To compile the countloads pass code run the following:
+To compile the countloads pass code run the following from the base directory:
 ```
-cd countloads/build
+cd countloads
+mkdir build
+cd build
+cmake ..
 make
 ```
 
 To run the pass on your own code, run the following:
 ```
 clang++ -S -emit-llvm yourcode.cpp -o yourcode.ll
-opt -S -load countloads/build/countloads/libCountLoadsPass.so -rmLoads yourcode.ll -o yourcode.ll
+opt -S -load countloads/build/countloads/libCountLoadsPass.so -countLoads yourcode.ll -o yourcode.ll
 llc -filetype=obj yourcode.ll -o yourcode.o
 clang++ youcode.o countloads/countloads/runtime_defs.o -o yourcode
 ```
 
-yourcode will now be an executable that will run your code and print out the number of loads in it.
+yourcode will now be an executable that will run your code and print out the number of loads in it. The file runtime_defs.o contains the counting function we are inserting after every load instruction.
 
-The source code can be found in countloads/countloads/CountLoads.cpp
+The source code for the pass can be found in countloads/countloads/CountLoads.cpp and the source code for the counting function can be found in countloads/countloads/runtime_defs.cpp 
 
 <h5> Implementation and Testing </h5>
 

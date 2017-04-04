@@ -1,13 +1,14 @@
 #include <stdio.h>
+#include <stdint.h>
 
 extern "C" {
 
     void increment(int toPrint) {
 
-        static int count = 0;
+        static uint64_t count = 0;
         
         if (toPrint) {
-            printf("%d Loads Instructions\n", count);
+            printf("%lu Loads Instructions\n", count);
             return;
         }
 

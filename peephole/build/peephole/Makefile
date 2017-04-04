@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dpdicken/School/553/a2/repo/peephole
+CMAKE_SOURCE_DIR = /home/dpdicken/School/553/a2/passes/peephole
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dpdicken/School/553/a2/repo/peephole/build
+CMAKE_BINARY_DIR = /home/dpdicken/School/553/a2/passes/peephole/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/repo/peephole/build/CMakeFiles /home/dpdicken/School/553/a2/repo/peephole/build/peephole/CMakeFiles/progress.marks
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/repo/peephole/build/CMakeFiles 0
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/passes/peephole/build/CMakeFiles /home/dpdicken/School/553/a2/passes/peephole/build/peephole/CMakeFiles/progress.marks
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/passes/peephole/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/clean
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/preinstall
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/preinstall
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 peephole/CMakeFiles/rmLoadsPass.dir/rule:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/CMakeFiles/rmLoadsPass.dir/rule
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f CMakeFiles/Makefile2 peephole/CMakeFiles/rmLoadsPass.dir/rule
 .PHONY : peephole/CMakeFiles/rmLoadsPass.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ rmLoadsPass: peephole/CMakeFiles/rmLoadsPass.dir/rule
 
 # fast build rule for target.
 rmLoadsPass/fast:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/build
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/build
 .PHONY : rmLoadsPass/fast
 
 PA1.o: PA1.cpp.o
@@ -131,7 +131,7 @@ PA1.o: PA1.cpp.o
 
 # target to build an object file
 PA1.cpp.o:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/PA1.cpp.o
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/PA1.cpp.o
 .PHONY : PA1.cpp.o
 
 PA1.i: PA1.cpp.i
@@ -140,7 +140,7 @@ PA1.i: PA1.cpp.i
 
 # target to preprocess a source file
 PA1.cpp.i:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/PA1.cpp.i
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/PA1.cpp.i
 .PHONY : PA1.cpp.i
 
 PA1.s: PA1.cpp.s
@@ -149,7 +149,7 @@ PA1.s: PA1.cpp.s
 
 # target to generate assembly for a file
 PA1.cpp.s:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/PA1.cpp.s
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/PA1.cpp.s
 .PHONY : PA1.cpp.s
 
 # Help Target
@@ -175,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/dpdicken/School/553/a2/repo/peephole/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/dpdicken/School/553/a2/passes/peephole/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dpdicken/School/553/a2/passes/peephole
+CMAKE_SOURCE_DIR = /home/dpdicken/School/553/a2/repo/countloads
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dpdicken/School/553/a2/passes/peephole/build
+CMAKE_BINARY_DIR = /home/dpdicken/School/553/a2/repo/countloads
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/passes/peephole/build/CMakeFiles /home/dpdicken/School/553/a2/passes/peephole/build/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/passes/peephole/build/CMakeFiles 0
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/repo/countloads/CMakeFiles /home/dpdicken/School/553/a2/repo/countloads/countloads/CMakeFiles/progress.marks
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f CMakeFiles/Makefile2 countloads/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dpdicken/School/553/a2/repo/countloads/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f CMakeFiles/Makefile2 countloads/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,31 +97,60 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f CMakeFiles/Makefile2 countloads/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f CMakeFiles/Makefile2 countloads/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named rmLoadsPass
+# Convenience name for target.
+countloads/CMakeFiles/CountLoadsPass.dir/rule:
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f CMakeFiles/Makefile2 countloads/CMakeFiles/CountLoadsPass.dir/rule
+.PHONY : countloads/CMakeFiles/CountLoadsPass.dir/rule
 
-# Build rule for target.
-rmLoadsPass: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rmLoadsPass
-.PHONY : rmLoadsPass
+# Convenience name for target.
+CountLoadsPass: countloads/CMakeFiles/CountLoadsPass.dir/rule
+
+.PHONY : CountLoadsPass
 
 # fast build rule for target.
-rmLoadsPass/fast:
-	$(MAKE) -f peephole/CMakeFiles/rmLoadsPass.dir/build.make peephole/CMakeFiles/rmLoadsPass.dir/build
-.PHONY : rmLoadsPass/fast
+CountLoadsPass/fast:
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f countloads/CMakeFiles/CountLoadsPass.dir/build.make countloads/CMakeFiles/CountLoadsPass.dir/build
+.PHONY : CountLoadsPass/fast
+
+CountLoads.o: CountLoads.cpp.o
+
+.PHONY : CountLoads.o
+
+# target to build an object file
+CountLoads.cpp.o:
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f countloads/CMakeFiles/CountLoadsPass.dir/build.make countloads/CMakeFiles/CountLoadsPass.dir/CountLoads.cpp.o
+.PHONY : CountLoads.cpp.o
+
+CountLoads.i: CountLoads.cpp.i
+
+.PHONY : CountLoads.i
+
+# target to preprocess a source file
+CountLoads.cpp.i:
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f countloads/CMakeFiles/CountLoadsPass.dir/build.make countloads/CMakeFiles/CountLoadsPass.dir/CountLoads.cpp.i
+.PHONY : CountLoads.cpp.i
+
+CountLoads.s: CountLoads.cpp.s
+
+.PHONY : CountLoads.s
+
+# target to generate assembly for a file
+CountLoads.cpp.s:
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(MAKE) -f countloads/CMakeFiles/CountLoadsPass.dir/build.make countloads/CMakeFiles/CountLoadsPass.dir/CountLoads.cpp.s
+.PHONY : CountLoads.cpp.s
 
 # Help Target
 help:
@@ -131,7 +160,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... rmLoadsPass"
+	@echo "... CountLoadsPass"
+	@echo "... CountLoads.o"
+	@echo "... CountLoads.i"
+	@echo "... CountLoads.s"
 .PHONY : help
 
 
@@ -143,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/dpdicken/School/553/a2/repo/countloads && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

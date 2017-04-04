@@ -6,23 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/home/dpdicken/School/553/a2/repo/peephole/peephole/PA1.cpp
+/home/dpdicken/School/553/a2/passes/peephole/peephole/PA1.cpp
 boost/lexical_cast.hpp
 -
 string
 -
 llvm/Pass.h
-/home/dpdicken/School/553/a2/repo/peephole/peephole/llvm/Pass.h
+/home/dpdicken/School/553/a2/passes/peephole/peephole/llvm/Pass.h
 llvm/IR/Function.h
-/home/dpdicken/School/553/a2/repo/peephole/peephole/llvm/IR/Function.h
+/home/dpdicken/School/553/a2/passes/peephole/peephole/llvm/IR/Function.h
 llvm/Support/raw_ostream.h
-/home/dpdicken/School/553/a2/repo/peephole/peephole/llvm/Support/raw_ostream.h
+/home/dpdicken/School/553/a2/passes/peephole/peephole/llvm/Support/raw_ostream.h
 llvm/IR/LegacyPassManager.h
-/home/dpdicken/School/553/a2/repo/peephole/peephole/llvm/IR/LegacyPassManager.h
+/home/dpdicken/School/553/a2/passes/peephole/peephole/llvm/IR/LegacyPassManager.h
 llvm/Transforms/IPO/PassManagerBuilder.h
-/home/dpdicken/School/553/a2/repo/peephole/peephole/llvm/Transforms/IPO/PassManagerBuilder.h
+/home/dpdicken/School/553/a2/passes/peephole/peephole/llvm/Transforms/IPO/PassManagerBuilder.h
 llvm/IR/InstIterator.h
-/home/dpdicken/School/553/a2/repo/peephole/peephole/llvm/IR/InstIterator.h
+/home/dpdicken/School/553/a2/passes/peephole/peephole/llvm/IR/InstIterator.h
 
 /usr/local/include/llvm-c/Types.h
 llvm/Support/DataTypes.h

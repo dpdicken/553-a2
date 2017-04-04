@@ -3,7 +3,7 @@
 
 # Relative path conversion top directories.
 set(CMAKE_RELATIVE_PATH_TOP_SOURCE "/home/dpdicken/School/553/a2/passes/peephole")
-set(CMAKE_RELATIVE_PATH_TOP_BINARY "/home/dpdicken/School/553/a2/passes/peephole/build")
+set(CMAKE_RELATIVE_PATH_TOP_BINARY "/home/dpdicken/School/553/a2/passes/peephole")
 
 # Force unix paths in dependencies.
 set(CMAKE_FORCE_UNIX_PATHS 1)
