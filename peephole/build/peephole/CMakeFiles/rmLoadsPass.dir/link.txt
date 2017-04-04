@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC   -shared  -o librmLoadsPass.so CMakeFiles/rmLoadsPass.dir/PA1.cpp.o  -L/usr/local/lib 
