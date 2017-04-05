@@ -4,6 +4,19 @@
 <h3> Intro </h3>
 This project contains two passes written in LLVM using it's API's to be used by LLVM to optimize passed in IR. This accompanying README also contains information on how to run these passes, how they were created, how they effect performance of the lulesh application, as well as a discussion of other passes built-in to LLVM.
 
+In this readme, I will discuss several passes. First, I will cover the two I created, rmLoads and countLoads, which remove unnecessary loads and count the number of load calls respectively. I will also talk about the llvm passes O3, dce, and constprop. It seems independently, these passes do not offer much performance benefit. However, when combined together, such as in O3, they can be much more powerful.
+
+<h3> General Pass Results </h3>
+| Pass        | Runtime         | 
+| :-------------: |:-------------:|
+| no opt      |  76.97 (s) |
+| rmLoads      |  76.98 (s) |
+| countLoads w/ noopt |   667.76 (s)     |
+| countLoads w/ rmLoads |   615.38 (s)     |
+| -dce and -constprop |   77.45 (s)    |
+| -O3 |   22.38 (s)    |
+
+
 <h3> Peephole Optimzation Pass </h3>
 
 <h5> Building and Running </h5>
@@ -260,7 +273,7 @@ FOM                  =  40.892129 (z/s)
 306829443189 Loads Instructions
 ```
 
-
+It appears that my rmLoads pass reduces the number of load instruction calls by 3728087241. This is a significant amount of loads removed, however, it is not that many in the grand scheme of things because there are still over 300 billion loads.
 
 <h3> Polly </h3>
 
@@ -373,6 +386,8 @@ Elapsed time         =      77.45 (s)
 Grind time (us/z/c)  =  3.0778776 (per dom)  ( 3.0778776 overall)
 FOM                  =  324.89921 (z/s)
 ```
+
+Running lulesh with -dce and -constprop seems to actually take longer than the non optimized version.
 
 <h5> Visualizing with opt </h5>
 
