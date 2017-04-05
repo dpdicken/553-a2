@@ -4,7 +4,7 @@
 <h3> Intro </h3>
 This project contains two passes written in LLVM using it's API's to be used by LLVM to optimize passed in IR. This accompanying README also contains information on how to run these passes, how they were created, how they effect performance of the lulesh application, as well as a discussion of other passes built-in to LLVM.
 
-In this readme, I will discuss several passes. First, I will cover the two I created, rmLoads and countLoads, which remove unnecessary loads and count the number of load calls respectively. I will also talk about the llvm passes O3, dce, and constprop. It seems independently, these passes do not offer much performance benefit. However, when combined together, such as in O3, they can be much more powerful.
+In this README, I will discuss several passes. First, I will cover the two I created, rmLoads and countLoads, which remove unnecessary loads and count the number of load calls respectively. I will also talk about the llvm passes O3, dce, and constprop. It seems independently, these passes do not offer much performance benefit. However, when combined together, such as in O3, they can be much more powerful.
 
 <h3> General Pass Results </h3>
 
