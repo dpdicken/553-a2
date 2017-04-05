@@ -80,21 +80,7 @@ namespace {
         // Generate the next label for an instruction
         uint64_t getLabel() {
 
-            // Make the counter a string, prepend 1 to it
-            std::string num;
-            num += boost::lexical_cast<std::string>(counter);
-            counter++;
-
-            // If the counter is 0, return 1 for the label
-            if (num.compare("0") == 0) {
-                return 1;
-            }
-
-            // Prepend the 1 for the label
-            num.insert(0, 1, '1');
-
-            // Cast result and return
-            return  boost::lexical_cast<uint64_t>(num);
+            return counter++;
 
         }
 
