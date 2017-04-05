@@ -9,14 +9,14 @@ In this readme, I will discuss several passes. First, I will cover the two I cre
 <h3> General Pass Results </h3>
 
 ```
-| Pass                  | Runtime      | 
-| :-------------------: | :----------: |
-| no opt                |  76.97 (s)   |
-| rmLoads               |  76.98 (s)   |
-| countLoads w/ noopt   |   667.76 (s) |
-| countLoads w/ rmLoads |   615.38 (s) |
-| -dce and -constprop   |   77.45 (s)  |
-| -O3                   |   22.38 (s)  |
+| Pass                  | Runtime     | 
+| :-------------------: | :---------: |
+| no opt                |  76.97 (s)  |
+| rmLoads               |  76.98 (s)  |
+| countLoads w/ noopt   |  667.76 (s) |
+| countLoads w/ rmLoads |  615.38 (s) |
+| -dce and -constprop   |  77.45 (s)  |
+| -O3                   |  22.38 (s)  |
 ```
 
 <h3> Peephole Optimzation Pass </h3>
