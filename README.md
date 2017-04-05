@@ -279,6 +279,8 @@ FOM                  =  40.892129 (z/s)
 
 It appears that my rmLoads pass reduces the number of load instruction calls by 3728087241. This is a significant amount of loads removed, however, it is not that many in the grand scheme of things because there are still over 300 billion loads.
 
+It took well over 10 minutes to run each of these passes individually. Apparently making 300 billion calls to the counting function takes a long time!
+
 <h3> Polly </h3>
 
 Polly is a program optimization tool. It focuses on optimizing loop structure and data locality. It performs optimizations such as loop tiling, loop fusion, and other classic loop transformations. It can also exploit OpenMP parallelism. While Polly performs many optimizations on its own, once it is done, it can enable many other optimizations to be performed.  Polly uses the polyhedral model to implement these optimizations. 
