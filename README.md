@@ -7,6 +7,7 @@ This project contains two passes written in LLVM using it's API's to be used by 
 In this readme, I will discuss several passes. First, I will cover the two I created, rmLoads and countLoads, which remove unnecessary loads and count the number of load calls respectively. I will also talk about the llvm passes O3, dce, and constprop. It seems independently, these passes do not offer much performance benefit. However, when combined together, such as in O3, they can be much more powerful.
 
 <h3> General Pass Results </h3>
+
 ```
 | Pass                  | Runtime      | 
 | :-------------------: | :----------: |
@@ -17,7 +18,6 @@ In this readme, I will discuss several passes. First, I will cover the two I cre
 | -dce and -constprop   |   77.45 (s)  |
 | -O3                   |   22.38 (s)  |
 ```
-
 
 <h3> Peephole Optimzation Pass </h3>
 
