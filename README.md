@@ -4,6 +4,21 @@
 <h3> Intro </h3>
 This project contains two passes written in LLVM using it's API's to be used by LLVM to optimize passed in IR. This accompanying README also contains information on how to run these passes, how they were created, how they effect performance of the lulesh application, as well as a discussion of other passes built-in to LLVM.
 
+In this README, I will discuss several passes. First, I will cover the two I created, rmLoads and countLoads, which remove unnecessary loads and count the number of load calls respectively. I will also talk about the llvm passes O3, dce, and constprop. It seems independently, these passes do not offer much performance benefit. However, when combined together, such as in O3, they can be much more powerful.
+
+<h3> General Pass Results </h3>
+
+```
+| Pass                  | Runtime     | 
+| :-------------------: | :---------: |
+| no opt                |  76.97 (s)  |
+| rmLoads               |  76.98 (s)  |
+| countLoads w/ noopt   |  667.76 (s) |
+| countLoads w/ rmLoads |  615.38 (s) |
+| -dce and -constprop   |  77.45 (s)  |
+| -O3                   |  22.38 (s)  |
+```
+
 <h3> Peephole Optimzation Pass </h3>
 
 <h5> Building and Running </h5>
@@ -260,7 +275,7 @@ FOM                  =  40.892129 (z/s)
 306829443189 Loads Instructions
 ```
 
-
+It appears that my rmLoads pass reduces the number of load instruction calls by 3728087241. This is a significant amount of loads removed, however, it is not that many in the grand scheme of things because there are still over 300 billion loads.
 
 <h3> Polly </h3>
 
@@ -344,11 +359,11 @@ clang -O3 -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-paralle
 
 <h3> LLVM Pass Experimentation </h3>
 
-To study different optimization passes, I have selected two passes to run the lulesh application code through. I selected a dead code elimination pass (-dce) and a constant propagation pass (-constprop). I will report how these passes change the run time of the application. 
+To study different optimization passes, I have selected two passes to run the lulesh application code through. I selected a dead code elimination pass (-dce) and a constant propagation pass (-constprop). I will report how these passes change the run time of the application. I will also compare them to -O3.
 
-Dead code elimination is an optimization that gets rid of unused codei that does not effect the results of the program. It finds instructions that are never run and removes them from the code. This optimization relies upon the control flow graph of the program.  
+Dead code elimination is an optimization that gets rid of unused codei that does not effect the results of the program. It finds instructions that are never run and removes them from the code. This optimization relies upon the control flow graph of the program.  Looking at the source code, this pass is a BasicBlockPass, meaning it is run on each basic block in the program.
 
-Constant propagation removes complex algebraic expressions from the code. It detects expressions that only constants and replaces that calculation with the constant result instead. This optimization is implemented by evaluating each instruction. If there are ever algebraic operations that only use constants, the compiler computes the expression, and replaces the algebraic expression with the result.
+Constant propagation removes complex algebraic expressions from the code. It detects expressions that only constants and replaces that calculation with the constant result instead. This optimization is implemented by evaluating each instruction. If there are ever algebraic operations that only use constants, the compiler computes the expression, and replaces the algebraic expression with the result. Looking at the source code, this pass is a FunctionPass, meaning it is run on each function in the program.
 
 <h5> Running Lulesh with no optimizations </h5>
 
@@ -373,6 +388,8 @@ Elapsed time         =      77.45 (s)
 Grind time (us/z/c)  =  3.0778776 (per dom)  ( 3.0778776 overall)
 FOM                  =  324.89921 (z/s)
 ```
+
+Running lulesh with -dce and -constprop seems to actually take longer than the non optimized version. It does not seem to have any effect on the speed of the program. However, the -O3 optimization enhances the run time significantly. Looking at the -O3 optimization, it seems to do a lot of optimizations to the loop structures in the program. So it seems a lot of the latency from this program are coming from loops, which -dce and -constprop do not optimize. So, it makes sense there was not much change when using them.
 
 <h5> Visualizing with opt </h5>
 
